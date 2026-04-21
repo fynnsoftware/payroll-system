@@ -1,0 +1,146 @@
+﻿no,Company Registration,empid,Name,Department,Position,Email,User,Pass
+1,0105553036100,TH059,Daratpong Chaimongkolnimit,Finance,"Senior Manager, Financial Operation",daratpong@2c2p.com,daratpong@2c2p.com,TH15195
+2,0105553036100,TH095,Sirachut Chulikorn,Operations Support,"Executive, Customer Support",sirachut@2c2p.com,sirachut@2c2p.com,TH49536
+3,0105553036100,TH102,Chaiyapat Intasarn,Operations Support,"Manager, Customer Support",chaiyapat@2c2p.com,chaiyapat@2c2p.com,TH21141
+4,0105553036100,TH106,Pongsuk Pongkanaputinad,Marketing,"Assistant Manager, Marketing",pongsuk@2c2p.com,pongsuk@2c2p.com,TH58267
+5,0105553036100,TH149,Sarisa Thanasumbun,Operations Support,"Executive, Customer Support",sarisa@2c2p.com,sarisa@2c2p.com,TH33113
+6,0105553036100,TH150,Saraluck Leemanachevakul,Operations Support,"SeniorManager, Customer Support",saraluck@2c2p.com,saraluck@2c2p.com,TH92786
+7,0105553036100,TH223,Aung Kyi,Technology,"Senior Manager, Database Engineer",aungkyi@2c2p.com,aungkyi@2c2p.com,TH95839
+8,0105553036100,TH258,Kamin Satheintaworawong,Finance,"Manager, Financial Operation",kamin@2c2p.com,kamin@2c2p.com,TH06748
+9,0105553036100,TH275,Sutthida Tathip,Operations Support,"Senioe Executive, Customer Support",sutthida@2c2p.com,sutthida@2c2p.com,TH02717
+10,0105553036100,TH277,Muhamad Firdaus Bin Bachik,Peoject Management,"Deputy Director, Projects",firdaus@2c2p.com,firdaus@2c2p.com,TH12215
+11,0105553036100,TH278,Natnicha Sangsuwan,Operations Support,"Senior Executive, Customer Support",natnicha@2c2p.com,natnicha@2c2p.com,TH78011
+12,0105553036100,TH295,Phatraphon Uno,Risk & Fraud,"Manager, Risk & Fraud",phatraphon@2c2p.com,phatraphon@2c2p.com,TH08132
+13,0105553036100,TH316,Gevin Theekshana Kawdawatta,Technology,"Senior Manager, System Analyst",gevin@2c2p.com,gevin@2c2p.com,TH12345
+14,0105553036100,TH326,Dmitry Nenazhenko,Technology,"Manager Solution Architect, Developments",dmitry@2c2p.com,dmitry@2c2p.com,TH63723
+15,0105553036100,TH341,Piyoros Youngyoodee,Business Development,"Senior Manager, Business Development",piyoros@2c2p.com,piyoros@2c2p.com,TH30715
+16,0105553036100,TH342,Natnicha Sawangpaisarnkul,Finance,"Senior Executive, Financial Opearations",natnicha.s@2c2p.com,natnicha.s@2c2p.com,TH93065
+17,0105553036100,TH344,Karnt Ek-ularnpan,Technology,"Manager, System Analyst ",karnt@2c2p.com,karnt@2c2p.com,TH67298
+18,0105553036100,TH356,Thiradaorn Predee,Technology,"Specialist, Quality Assurance",thiradaorn@2c2p.com,thiradaorn@2c2p.com,TH01101
+19,0105553036100,TH362,Pratikorn Assawarangsri,Finance,"Senior Executive, Financial Operations",pratikorn.ass@2c2p.com,pratikorn.ass@2c2p.com,TH97157
+20,0105553036100,TH367,Duangporn Ratsinthorn,Operations Support,"Assistant Manager, Customer Support",duangporn.rat@2c2p.com,duangporn.rat@2c2p.com,TH87381
+21,0105553036100,TH382,Adam Michael Rivera,Project Management,"Director, Projects",adam.riv@2c2p.com,adam.riv@2c2p.com,TH12222
+22,0105553036100,TH389,Teeratus Kaibut,Technology,"Specialist, NOC Support",teeratus.kai@2c2p.com,teeratus.kai@2c2p.com,TH40841
+23,0105553036100,TH403,Athikom Chunhachatchawankul,Finance,"Assistant Manager, Financial Operations",athikom.chu@2c2p.com,athikom.chu@2c2p.com,TH73040
+24,0105553036100,TH404,Varisha Tirathanisara,Business Development,"Senior Executive, Sales",Varisha@2c2p.com,Varisha@2c2p.com,TH55794
+25,0105553036100,TH406,Kunthea Ros,Operations Support,"Executive, Customer Support",kunthea.ros@2c2p.com,kunthea.ros@2c2p.com,TH19135
+26,0105553036100,TH415,Sergei Durnev,Technology,"Manager, System Analyst",sergei.dur@2c2p.com,sergei.dur@2c2p.com,TH54037
+27,0105553036100,TH446,Pornpetch Sathaporncharoenchai,Technology,"Senior Specialist, Quality Assurance",pornpetch.sat@2c2p.com,pornpetch.sat@2c2p.com,TH23360
+28,0105553036100,TH451,Ratchanok Termsirichit,Technology,"Assistant Manager, Quality Assurance ",ratchanok.ter@2c2p.com,ratchanok.ter@2c2p.com,TH75740
+29,0105553036100,TH455,Rahul Jangir,Technology,"Team lead, Application Development",rahul.jan@2c2p.com,rahul.jan@2c2p.com,TH35253
+30,0105553036100,TH458,Naruchaya Tibta,Finance,"Executive, Financial Operations",naruchaya.tib@2c2p.com,naruchaya.tib@2c2p.com,TH51446
+31,0105553036100,TH477,Settasit Prachapitak,Technology,"Specialist, Site Reliability Engineering",settasit.pra@2c2p.com,settasit.pra@2c2p.com,TH06220
+32,0105553036100,TH489,Anocha Yamboonying,Technology,"Assistant Manager, Data Reporting",anocha.yam@2c2p.com,anocha.yam@2c2p.com,TH38936
+33,0105553036100,TH501,Pakjira Vijit,Finance,"Executive, Accounting",pakjira.vij@2c2p.com,pakjira.vij@2c2p.com,TH58378
+34,0105553036100,TH509,Nattacha Pairoj,Finance,"Executive, Accounting",nattacha.pai@2c2p.com,nattacha.pai@2c2p.com,TH34754
+35,0105553036100,TH519,Thanatnun Sriwattana,Legal,"Manager, Legal",thanatnun.sri@2c2p.com,thanatnun.sri@2c2p.com,TH02159
+36,0105553036100,TH517,Kyi Yadanar Htun,Business Development,"Manager, Product",kyi@2c2p.com,kyi@2c2p.com,TH44577
+37,0105553036100,TH521,Kwanchanok Rodwang,Technology,"Specialist, Quality Assurance",kwanchanok.rod@2c2p.com,kwanchanok.rod@2c2p.com,TH26750
+38,0105553036100,TH543,Sirada Banmai,Technology,"Senior Engineer, Product Support",sirada.ban@2c2p.com,sirada.ban@2c2p.com,TH39273
+39,0105553036100,TH545,Shun Lei Wai Ko,Technology,"Specialist, Data Engineering",shunleiwai.ko@2c2p.com,shunleiwai.ko@2c2p.com,TH33433
+40,0105553036100,TH552,Sottipat Putkhan,Risk & Fraud,"Senior Executiv, Risk & Fraud",sottipat.put@2c2p.com,sottipat.put@2c2p.com,TH31047
+41,0105553036100,TH554,Paing Kyaw Zin,Technology,"Senior Manager, Product",paingkyawzin@2c2p.com,paingkyawzin@2c2p.com,TH95730
+42,0105553036100,TH563,Ei Phyu Zin,Technology,"Engineer, Application Development",eiphyuzin@2c2p.com,eiphyuzin@2c2p.com,TH78912
+43,0105553036100,TH565,Aung Than Oo,Technology,"Senior Engineer, Application Development",aungthanoo@2c2p.com,aungthanoo@2c2p.com,TH88155
+44,0105553036100,TH566,Myo Ko Ko,Technology,"Senior Engineer, Application Development",myokoko@2c2p.com,myokoko@2c2p.com,TH33283
+45,0105553036100,TH575,Saung Myint Zu,Technology,"Specialist, Data Reporting",saungmyintzu@2c2p.com,saungmyintzu@2c2p.com,TH48692
+46,0105553036100,TH576,Elena Fedorova,Technology,"Senior Engineer, Application Development",elena.fed@2c2p.com,elena.fed@2c2p.com,TH57606
+47,0105553036100,TH581,Wasuporn Pupatwiboon,Technology,"Senior Specialist, Quality Assurance",wasuporn.pup@2c2p.com,wasuporn.pup@2c2p.com,TH16548
+48,0105553036100,TH582,Chalita Boonmak,Technology,"Engineer, Application Development",chalita.boo@2c2p.com,chalita.boo@2c2p.com,TH61375
+49,0105553036100,TH589,Khin Hnin Hlaing,Technology,"Specialist, Quality Assurance",khinhninhlaing@2c2p.com,khinhninhlaing@2c2p.com,TH12345
+50,0105553036100,TH590,Pann Sabai Phyu,Technology,"Specialist, Product Support",pannsabaiphyu@2c2p.com,pannsabaiphyu@2c2p.com,TH221002
+51,0105553036100,TH591,Hnin Nu Aye,Project Management,"Senior Manager, Projects",hninnuaye@2c2p.com,hninnuaye@2c2p.com,TH221003
+52,0105553036100,TH593,Thu Yein Oo,Technology,"Assistant Manager, Product Support",thuyeinoo@2c2p.com,thuyeinoo@2c2p.com,TH221001
+53,0105553036100,TH594,Benjaporn Outapao,Technology,"Senior Specialist, Infrastructure",benjaporn.out@2c2p.com,benjaporn.out@2c2p.com,TH50659
+54,0105553036100,TH595,Thawatchai Tanee,Technology,"Senior Specialist, Infrastructure",thawatchai.tan@2c2p.com,thawatchai.tan@2c2p.com,TH81009
+55,0105553036100,TH598,Ye Myo Thu,Technology,"Manager, Cyber Security",yemyothu@2c2p.com,yemyothu@2c2p.com,TH32486
+56,0105553036100,TH601,Thu Ra Zaw Saie Aung,Technology,"Specialist, Data Engineering",thurazawsaieaung@2c2p.com,thurazawsaieaung@2c2p.com,TH221004
+57,0105553036100,TH611,Yin Myoe Sint,Technology,Manager Quality Assurance,myoe@2c2p.com,myoe@2c2p.com,TH00010
+58,0105553036100,TH616,Chaw Su Thu Thu,Product,"Manager, Product",chawsuthuthu@2c2p.com,chawsuthuthu@2c2p.com,TH99641
+59,0105553036100,TH618,Thin Thin Nwe,Technology,"Senior Engineer, Application Development",thinnwe@2c2p.com,thinnwe@2c2p.com,TH09249
+60,0105553036100,TH628,Ko Ko Win,Technology,"Assistant Manager, System Analyst",kokowin@2c2p.com,kokowin@2c2p.com,TH72308
+61,0105553036100,TH629,Zin Ko Ko ,Technology,"Senior Specialist, Cyber Security",kzinkoko@2c2p.com,kzinkoko@2c2p.com,TH08478
+62,0105553036100,TH631,Toe Si Thu,Technology,"Manager, Application Development",toesithu@2c2p.com,toesithu@2c2p.com,TH83892
+63,0105553036100,TH636,Aung Thet Zaw,Technology,"Teamlead, Site Reliability Engineering",aungthetzaw@2c2p.com,aungthetzaw@2c2p.com,TH01091
+64,0105553036100,TH637,Mathieu Le Petillon,Technology,"Team lead, Application Development",mathieu.lep@2c2p.com,mathieu.lep@2c2p.com,TH64235
+65,0105553036100,TH644,Win Min Htet,Technology,"Specialist, DevOps",winminhtet@2c2p.com,winminhtet@2c2p.com,TH51981
+66,0105553036100,TH647,Alexis Jae Rosas Quebral,Technology,"Specialist, Quality Assurance",alexis.que@2c2p.com,alexis.que@2c2p.com,TH1577A
+67,0105553036100,TH649,Lin Maung Thant,Technology,"Senior Specialist, Application Security Engineering",linnmaungthant@2c2p.com,linnmaungthant@2c2p.com,TH38581
+68,0105553036100,TH651,Sabai Hlaing Win,Technology,"Specilist, System Architect",sabaihlaing@2c2p.com,sabaihlaing@2c2p.com,TH26635
+69,0105553036100,TH664,Khin Htet Htet Khine,Technology,"Specialist, Quality Assurance",khinhtethtet@2c2p.com,khinhtethtet@2c2p.com,TH75371
+70,0105553036100,TH665,Hnin Thael Phyu,Technology,"Manager, Development",hninthaelphyu@2c2p.com,hninthaelphyu@2c2p.com,TH64256
+71,0105553036100,TH666,Lae Lae Moe Myint,Technology,"Engineer, Application Development",laelae@2c2p.com,laelae@2c2p.com,TH76164
+72,0105553036100,TH667,Hmwe Pwint Phyu,Technology,"Assistant Manager, Quality Assurance",HmwePwintPhyu@2c2p.com,HmwePwintPhyu@2c2p.com,TH87843
+73,0105553036100,TH674,Tin May Linn,Technology,"Team lead, Application Development",tinmaylinn@2c2p.com,tinmaylinn@2c2p.com,TH29271
+74,0105553036100,TH675,Eaindra Soe Naing,Product,"Assistant Manager, Products",eaindra@2c2p.com,eaindra@2c2p.com,TH29395
+75,0105553036100,TH676,Cynthia Hsu Mon,Operations,"Senior Analyst, Technical Account Management",cynthiahsu@2c2p.com,cynthiahsu@2c2p.com,TH29514
+76,0105553036100,TH677,Wutyee Kyaw,Technology,"Senior Engineer, Application Development",wutyee@2c2p.com,wutyee@2c2p.com,TH29735
+77,0105553036100,TH678,Daluwathumulle Gamage Kavinda Chandramal De Silva,Technology,"Senior Specialist, Quality Assurance",kavinda.des@2c2p.com,kavinda.des@2c2p.com,TH30156
+78,0105553036100,TH681,Hsu Myat Naing,Technology,"Senior Specialist, Quality Assurance",hsumyatnaing@2c2p.com,hsumyatnaing@2c2p.com,TH57028
+79,0105553036100,TH686,Lino JR Lipao Galido,Technology,"Senior Specilaist, Quality Assurance",lino.gal@2c2p.com,lino.gal@2c2p.com,TH2223A
+80,0105553036100,TH691,Naw Thaw Htoo Wah,Technology,"Specialist, Data Engineering",nawthawhtoowah@2c2p.com,nawthawhtoowah@2c2p.com,TH46548
+81,0105553036100,TH699,Min Thet Zaw Win,Technology,"Senior Manager, Application Development",thetzaw@2c2p.com,thetzaw@2c2p.com,TH13250
+82,0105553036100,TH703,Saw Zayar Aung,Technology,"Team Lead, Application Development",sawzayaraung@2c2p.com,sawzayaraung@2c2p.com,TH35334
+83,0105553036100,TH704,Shwe Yee Win,Technology,"Engineer, Application Development",shweyee@2c2p.com,shweyee@2c2p.com,TH29274
+84,0105553036100,TH705,Swan Htet Naing,Technology,"Engineer, Application Development",swanhtet@2c2p.com,swanhtet@2c2p.com,TH30477
+85,0105553036100,TH708,Deng Xiaonan,Business Development,"Director, Business Development",sean@2c2p.com,sean@2c2p.com,TH99371
+86,0105553036100,TH711,Eugene Ricafrente Borreo,Technology,"Senior Engineer, Product Support",eugene.bor@2c2p.com,eugene.bor@2c2p.com,TH2634A
+87,0105553036100,TH712,Joshim Uddin,Technology,"Engineer, Application Development",joshim.udd@2c2p.com,joshim.udd@2c2p.com,TH16432
+88,0105553036100,TH721,Su Paing Soe,Technology,"Senior Specialist, System Analyst",supaingsoe@2c2p.com,supaingsoe@2c2p.com,TH35179
+89,0105553036100,TH725,Ei Phyu Phyo,Project Management,"Manager, Projects",eiphyuphyo@2c2p.com,eiphyuphyo@2c2p.com,TH08633
+90,0105553036100,TH732,Aye Aye Myint,Technology,"Senior Specialist, Quality Assurance",ayeayemyint@2c2p.com,ayeayemyint@2c2p.com,TH25888
+91,0105553036100,TH733,Amy Zaw,Technology,"Team Lead, Quality Assurance",amy@2c2p.com,amy@2c2p.com,TH37770
+92,0105553036100,TH734,Khaing Nwe Zin,Technology,"Specialist, Quality Assurance",khaingnwezin@2c2p.com,khaingnwezin@2c2p.com,TH34467
+93,0105553036100,TH736,Saowalak Muentabut,Operations Support,"Executive, Customer Support",saowalak.mue@2c2p.com,saowalak.mue@2c2p.com,TH11745
+94,0105553036100,TH737,Khin Sandar Myint,Technology,"Engineer, Application Development",khinsandarmyint@2c2p.com,khinsandarmyint@2c2p.com,TH97589
+95,0105553036100,TH738,Nann Sai Kham,Technology,"Engineer, Application Development",saikham@2c2p.com,saikham@2c2p.com,TH37018
+96,0105553036100,TH739,Ngu Wah Kyaw,Technology,"Engineer, Application Development",nguwah@2c2p.com,nguwah@2c2p.com,TH73294
+97,0105553036100,TH740,Nyein Chan Aung,Technology,"Engineer, Application Development",nyein@2c2p.com,nyein@2c2p.com,TH59714
+98,0105553036100,TH741,Poe May Phyu,Technology,"Senior Engineer, Application Development",poemayphyu@2c2p.com,poemayphyu@2c2p.com,TH68627
+99,0105553036100,TH742,Yoon Yee Mon Aung,Technology,"Engineer, Application Development",yoonyeemon@2c2p.com,yoonyeemon@2c2p.com,TH76169
+100,0105553036100,TH747,Sami Al Sabbir,Technology,"Senior specialist, Quality Assurance",sami.als@2c2p.com,sami.als@2c2p.com,TH95267
+101,0105553036100,TH749,Vamsi Govind Surampudi,Technology,"Specialist, Quality Assurance",vamsigovind.sur@2c2p.com,vamsigovind.sur@2c2p.com,TH09958
+102,0105553036100,TH752,Graeme Ross Wicks,Technology,"Senior Engineer, Product Support",graemeross.wic@2c2p.com,graemeross.wic@2c2p.com,TH04932
+103,0105553036100,TH756,Aye Su mar,Technology,"Senior Manager, Product Analyst",ayesumar@2c2p.com,ayesumar@2c2p.com,TH41510
+104,0105553036100,TH763,Narongsak Moolkaew,Technology,"Specialist, NOC Support",narongsak.moo@2c2p.com,narongsak.moo@2c2p.com,TH66262
+105,0105553036100,TH768,"Gaetan, Jean, Joseph Mocci",Technology,"Senior Engineer, Application Development",gaetan.moc@2c2p.com,gaetan.moc@2c2p.com,TH39209
+106,0105553036100,TH775,Vinod Santharam,Technology,"Senior Engineer, Application Development",vinod.san@2c2p.com,vinod.san@2c2p.com,TH00469
+107,0105553036100,TH781,Debbie Lyn Charrise Adornado Chaves,Technology,"Engineer, Product Support",debbie.cha@2c2p.com,debbie.cha@2c2p.com,TH9432B
+108,0105553036100,TH784,Chonthipat Sitthiteerarangsee,Operations Support,"Executive, Customer Support",chonthipat.sit@2c2p.com,chonthipat.sit@2c2p.com,TH88605
+109,0105553036100,TH785,Treepak Painrungrot,Operations Support,"Executive, Customer Support",treepak.pai@2c2p.com,treepak.pai@2c2p.com,TH22896
+110,0105553036100,TH803,Enes As,Technology,"Engineer, Application Development",enes.as@2c2p.com,enes.as@2c2p.com,TH98640
+111,0105553036100,TH818,Yajing Jiang,Human Resources,"Deputy Director, Human Resources",enes.as@2c2p.com,enes.as@2c2p.com,TH87826
+112,0105553036100,TH819,Xiaomin Cui,Technology,Deputy CTO,xiaomin.cui@2c2p.com,xiaomin.cui@2c2p.com,TH64736
+113,0105553036100,TH828,Nyi Htway Tin,Technology,"Senior Manager, Application Development",nyihtway@2c2p.com,nyihtway@2c2p.com,TH48141
+114,0105553036100,TH827,Dejsomboon Roeksanant,Technology,"Specialist, NOC Engineer",dejsomboon.roe@2c2p.com,dejsomboon.roe@2c2p.com,TH81648
+115,0105553036100,TH832,Thitipong Phawadee,Technology,"Specialist, NOC Support",thitipong.pha@2c2p.com,thitipong.pha@2c2p.com,TH05943
+116,0105553036100,TH840,Thanya How,Technology,"Specialist, NOC Engineer",thanya.how@2c2p.com,thanya.how@2c2p.com,TH08038
+117,0105553036100,TH845,Damrong Chindapol,Technology,"Senior Specialist, Quality Assurance",damrong.chi@2c2p.com,damrong.chi@2c2p.com,TH81758
+118,0105553036100,TH851,Thanaree Thatakian,Human Resources,"Manager, Human Resources",thanaree.tha@2c2p.com,thanaree.tha@2c2p.com,TH28152
+119,0105553036100,TH852,Anak Satienthammakul,Technology,"Senior Engineer, Application Development",anak.sat@2c2p.com,anak.sat@2c2p.com,TH28047
+120,0105553036100,TH855,Arituch Khwanyuen,Technology,"Specialist, NOC Engineer",arituch.khw@2c2p.com,arituch.khw@2c2p.com,TH19321
+121,0105553036100,TH859,Thanakorn Aonmasai,Human Resources,"Assistant Manager, Human Resources",thanakorn.aon@2c2p.com,thanakorn.aon@2c2p.com,TH88400
+122,0105553036100,TH857,Tachsura Napad,Technology,"Engineer, Application Development",tachsura.nap@2c2p.com,tachsura.nap@2c2p.com,TH04727
+123,0105553036100,TH862,Penpun Singhaput,Project Management,"Coordinator, Project",penpun.sin@2c2p.com,penpun.sin@2c2p.com,TH23457
+124,0105553036100,TH867,Supawit Chutachan,Technology,"Senior Manager, NOC Engineer",supawit.chu@2c2p.com,supawit.chu@2c2p.com,TH86531
+125,0105553036100,TH856,Si Thu Aung,Technology,"Senor Engineer, Application Development",sithuaung@2c2p.com,sithuaung@2c2p.com,TH55430
+126,0105553036100,TH850,Christopher Lee,Technology,"Engineer, Application Development",christopher.lee@2c2p.com,christopher.lee@2c2p.com,TH31803
+127,0105553036100,TH858,Worapruch Wattanasuwan,Business Development,"Executive, Business Development",worapruch.wat@2c2p.com,worapruch.wat@2c2p.com,TH54345
+128,0105553036100,TH870,Franklin Hernan Fuentes,Business Development,"Deputy Director, Business Development",franklin.fue@2c2p.com,franklin.fue@2c2p.com,TH78533
+129,0105553036100,TH880,Thanakorn meesupprasert,Technology,"Engineer, Application Decelopment",thanakorn.mee@2c2p.com,thanakorn.mee@2c2p.com,TH36868
+130,0105553036100,TH882,Nitiphong Manaphong,Business Development,"Assistant Manager, Cards Operation",nitiphong.man@2c2p.com,nitiphong.man@2c2p.com,TH86816
+131,0105553036100,TH885,Nutdanai Sonwaisart,Product,"Engineer, Product",nutdanai.son@2c2p.com,nutdanai.son@2c2p.com,TH03721
+132,0105553036100,TH890,Kunakorn Topurin,Technology,"Specialist, Infrastructure",kunakorn.top@2c2p.com,kunakorn.top@2c2p.com,TH14387
+133,0105553036100,TH891,Worun Sukhtipyaroge,Technology,"Engineer, Application Development",worun.suk@2c2p.com,worun.suk@2c2p.com,TH03047
+134,0105553036100,TH893,Phu Pyae Pyae Khin,Technology,"Senior Specialist, Data Engineering",phupyaepyaekhin@2c2p.com,phupyaepyaekhin@2c2p.com,TH38260
+135,0105553036100,TH897,Kanyarat Suwannasuk,Product,"Manager, Product",kanyarat.suw@2c2p.com,kanyarat.suw@2c2p.com,TH13482
+136,0105553036100,TH898,Aphiwit Jaruchaikul,Technology,"Specialist, NOC Engineer",aphiwit.jar@2c2p.com,aphiwit.jar@2c2p.com,TH23725
+137,0105553036100,TH907,Aung Myo Myat,Human Resources,"Assistnat Manager, Human Resources",aungmyomyat@2c2p.com,aungmyomyat@2c2p.com,TH78195
+138,0105553036100,TH881,Jesmin Mannan,Technology,"Senior Specialist, Quality Assurance",Jesmin.man@2c2p.com,Jesmin.man@2c2p.com,TH260301
+139,0105553036100,TH914,Thandar Phyu,Finance,"Manager, Financial Operations",thandarphyu@2c2p.com,thandarphyu@2c2p.com,TH260302
+140,0105553036100,TH634,Bobby Theo,Business Development,"Manager, Digital Goods Operations",bobby.the@2c2p.com,bobby.the@2c2p.com,TH63434
+141,0105553036100,TH746,Chalisa Singkha,Technology,"Specialist, NOC Support",chalisa.sin@2c2p.com,chalisa.sin@2c2p.com,TH74634
+142,0105553036100,TH863,Saksith Supawajraksakul,Technology,"Manager, Product Suppot",saksith.sup@2c2p.com,saksith.sup@2c2p.com,TH86334
+143,0105553036100,TH615,Gabriele Rosso,Technology,"Manager, Application Development",Gabriele.ros@2c2p.com,Gabriele.ros@2c2p.com,TH61534
+144,0105553036100,TH495,Paphawee Hirunwatsiri,Legal,"Senior Manager, Legal",paphawee.hir@2c2p.com,paphawee.hir@2c2p.com,TH49534
+145,0105553036100,TH851,Thanaree Thatakian,Human Resources,"Manager, Human Resources",thanaree.tha@2c2p.com,thanaree.tha@2c2p.com,TH85134

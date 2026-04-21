@@ -1,0 +1,192 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==========================================
+// 1. SYSTEM CONFIG & MASTER DATA
+// ==========================================
+
+// 🌟 สร้างตาราง User แยกออกมาสำหรับระบบ Login โดยเฉพาะ
+model User {
+  id           String    @id @default(uuid())
+  username     String    @unique
+  email        String?   @unique
+  passwordHash String
+  role         String    @default("USER") // ADMIN หรือ USER
+  isActive     Boolean   @default(true)
+  
+  // ความสัมพันธ์ไปหา Employee (1-to-1)
+  employee     Employee? 
+  
+  createdAt    DateTime  @default(now())
+}
+
+model Company {
+  id           Int       @id @default(autoincrement())
+  companyCode  String    @unique
+  companyName  String
+  logoUrl      String?   // (ใส่ ? แปลว่าไม่มีก็ได้)
+  
+  parentId     Int?      
+  parent       Company?  @relation("CompanyHierarchy", fields: [parentId], references: [id])
+  subCompanies Company[] @relation("CompanyHierarchy")
+  
+  employees    Employee[]
+  payrolls     Payroll[]
+
+  importBatches PayrollImportBatch[]
+}
+
+model Employee {
+  id               String    @id
+  fullName         String
+  email            String?   // อีเมลสำหรับติดต่อทั่วไป
+  position         String?
+  department       String?
+  startDate        DateTime?
+  isActive         Boolean   @default(true)
+  bank             String?   
+  bankAccount      String?
+  
+  userId           String?   @unique
+  user             User?     @relation(fields: [userId], references: [id])
+  
+  currentCompanyId Int
+  company          Company   @relation(fields: [currentCompanyId], references: [id])
+  
+  payrolls         Payroll[]
+}
+// ==========================================
+// 2. PRODUCTION PAYROLL DATA
+// ==========================================
+
+model Payroll {
+  id              Int           @id @default(autoincrement())
+  month           Int
+  year            Int
+
+  totalEarnings   Decimal       @default(0.00)
+  totalDeductions Decimal       @default(0.00)
+  netSalary       Decimal       @default(0.00)
+  grossWage       Decimal       @default(0.00)
+  
+  // ปรับให้สอดคล้องกับรายละเอียดใหม่
+  salary          Decimal       @default(0.00)
+  tax             Decimal       @default(0.00)
+  sso             Decimal       @default(0.00)
+  pvf             Decimal       @default(0.00)
+
+  employeeId      String
+  employee        Employee      @relation(fields: [employeeId], references: [id])
+  
+  companyId       Int
+  company         Company       @relation(fields: [companyId], references: [id])
+  
+  items           PayrollItem[] 
+  createdAt       DateTime      @default(now())
+}
+
+model PayrollItem {
+  id          Int      @id @default(autoincrement())
+  itemType    String   
+  category    String   
+  description String?  
+  amount      Decimal  @default(0.00)
+
+  payrollId   Int
+  payroll     Payroll  @relation(fields: [payrollId], references: [id], onDelete: Cascade)
+}
+
+// ==========================================
+// 3. STAGING (IMPORT EXCEL DATA)
+// ==========================================
+
+model PayrollImportBatch {
+  id             String                @id @default(uuid())
+  fileName       String    
+  month          Int
+  year           Int
+  companyId      Int  
+  // 🌟 2. เพิ่มบรรทัดนี้เข้าไปครับ:
+  company        Company               @relation(fields: [companyId], references: [id])
+                   
+  paymentDate    String?               // 🌟 2. เพิ่มฟิลด์ paymentdate (เก็บเป็น String เพื่อง่ายต่อการรับค่าจากฟอร์ม)
+  
+  totalRecords   Int                   @default(0)
+  readyRecords   Int                   @default(0)
+  failedRecords  Int                   @default(0)
+  
+  status         String                @default("PENDING") 
+  uploadedById   String                
+  createdAt      DateTime              @default(now())
+  
+  records        PayrollImportRecord[]
+}
+
+model PayrollImportRecord {
+  id                        Int                @id @default(autoincrement())
+  batchId                   String
+  batch                     PayrollImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  
+  rowNumber                 Int                
+
+  // --- ข้อมูลพนักงาน (Employee Info) ---
+  employeeId                String?            
+  name                      String?            
+  position                  String?            
+  department                String?            
+  function                  String?            
+  startDate                 String?            
+  bank                      String?            
+  bankAccount               String?            
+
+  // 🌟 3. ปรับหมวดรายรับ (Earnings) ตามที่ระบุ
+  salary                    Decimal            @default(0.00) 
+  mobileAllowance           Decimal            @default(0.00) 
+  housingTravelingAllowance Decimal            @default(0.00) 
+  overtime                  Decimal            @default(0.00) 
+  bonus                     Decimal            @default(0.00) 
+  others                    Decimal            @default(0.00) 
+  parkingAllowance          Decimal            @default(0.00) 
+  perdiemOtherAdditional    Decimal            @default(0.00) 
+  
+  totalEarnings             Decimal            @default(0.00) 
+
+  // 🌟 4. ปรับหมวดรายจ่าย (Deductions) ตามที่ระบุ
+  tax                       Decimal            @default(0.00) 
+  socialSecurityFund        Decimal            @default(0.00) 
+  providentFund             Decimal            @default(0.00) 
+  studentLoanFund           Decimal            @default(0.00) 
+  parking                   Decimal            @default(0.00) 
+  otherDeduction            Decimal            @default(0.00) 
+  
+  totalDeduction            Decimal            @default(0.00) 
+
+  // --- สรุปยอด (Summary) ---
+  totalAmount               Decimal            @default(0.00) 
+  payrollAmount             Decimal            @default(0.00) 
+
+  status                    String             @default("READY") 
+  errorMessage              String?            
+
+  createdAt                 DateTime           @default(now())
+}
+// จำลองตารางเก็บประวัติการนำเข้าไฟล์เงินเดือน
+model ImportLog {
+  id           Int      @id @default(autoincrement())
+  importDate   DateTime @default(now()) // วันเวลาที่กด Import
+  filename     String   // ชื่อไฟล์ที่อัปโหลด
+  importedBy   String   // ชื่อคนที่อัปโหลด (Admin)
+  totalRecords Int      // จำนวนข้อมูลทั้งหมดในไฟล์
+  successCount Int      // จำนวนที่เข้าสำเร็จ
+  errorCount   Int      // จำนวนที่ Error
+  status       String   // สถานะ: SUCCESS, PARTIAL, FAILED
+}
