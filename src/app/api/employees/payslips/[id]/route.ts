@@ -1,11 +1,11 @@
 // src/app/api/employees/payslips/[id]/route.ts
-import { NextResponse, NextRequest } from "next/server"; // 🌟 เปลี่ยนมาใช้ NextRequest
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getToken } from "next-auth/jwt"; // 🌟 ใช้ getToken จะดึง Role ได้ชัวร์กว่า
+import { getToken } from "next-auth/jwt";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }, // 🌟 รองรับ Next.js 15 Promise params
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     // 🌟 1. เช็ก Token และสิทธิ์ของผู้ใช้งาน
@@ -30,6 +30,24 @@ export async function GET(
     if (!payslip) {
       return NextResponse.json({ error: "ไม่พบข้อมูลสลิป" }, { status: 404 });
     }
+
+    // ==========================================
+    // 🌟 2.5 แอบไปหา paymentDate จากตาราง PayrollImportBatch
+    // ==========================================
+    const relatedBatch = await prisma.payrollImportBatch.findFirst({
+      where: {
+        companyId: payslip.companyId,
+        month: payslip.month,
+        year: payslip.year,
+        // ถ้าตอนทำระบบนำเข้า มีการเซ็ต status="COMPLETED" สามารถเอาคอมเมนต์บรรทัดล่างออกได้ครับ
+        // status: "COMPLETED"
+      },
+      orderBy: { createdAt: "desc" }, // ดึงอันล่าสุดมาเผื่อมีการอัปโหลดทับ
+    });
+
+    // ดึงค่า paymentDate ออกมา (ถ้าไม่เจอให้เป็น null)
+    const fetchedPaymentDate = relatedBatch?.paymentDate || null;
+    // ==========================================
 
     // ==========================================
     // 🌟 3. ระบบรักษาความปลอดภัย (VIP Pass)
@@ -94,9 +112,10 @@ export async function GET(
       },
     });
 
-    // 🌟 5. แพ็กข้อมูล YTD รวมเข้าไปใน Response
+    // 🌟 5. แพ็กข้อมูล YTD และ paymentDate รวมเข้าไปใน Response
     const responseData = {
       ...payslip,
+      paymentDate: fetchedPaymentDate, // 👉 ยัดไส้ paymentDate ส่งไปให้หน้าเว็บตรงนี้!
       ytd: {
         netSalary: ytdAggregations._sum.netSalary || 0,
         totalEarnings: ytdAggregations._sum.totalEarnings || 0,
