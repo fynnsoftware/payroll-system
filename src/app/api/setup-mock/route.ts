@@ -24,113 +24,156 @@ export async function GET() {
       .filter((line) => line.trim() !== "");
     const mockEmployees = [];
 
+    // ลูปอ่านตั้งแต่บรรทัดที่ 2 เป็นต้นไป (บรรทัดแรกคือ Header)
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i]
         .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
         .map((c) => c.replace(/^"|"$/g, "").trim());
 
-      if (cols.length >= 9 && cols[2]) {
+      if (cols.length >= 11 && cols[2]) {
+        // 🌟 ถัาวันที่ว่างเปล่า หรือผิดฟอร์แมต ให้ใช้วันที่ปัจจุบันแทน ป้องกัน DB Error
+        let dateStr = cols[9] ? cols[9].replace(/\//g, " ") : "";
+        let parsedDate = dateStr ? new Date(dateStr) : new Date();
+        if (isNaN(parsedDate.getTime())) {
+          parsedDate = new Date();
+        }
+
         mockEmployees.push({
           companyReg: cols[1],
           id: cols[2],
           name: cols[3],
           department: cols[4],
           position: cols[5],
-          email: cols[6], // ดึงข้อมูลอีเมลดิบมา
+          email: cols[6],
           username: cols[7],
           passwordRaw: cols[8],
+          startDate: parsedDate,
+          status: cols[10]?.toLowerCase(),
         });
       }
     }
 
     let successCount = 0;
-    let skippedCount = 0;
-    let failedList: { id: string; reason: string }[] = []; // 🌟 เก็บรายชื่อคนที่ Error
+    let skippedList: string[] = []; // 🌟 เปลี่ยนเป็นเก็บรายชื่อ EMP ID แทนการนับเฉยๆ
+    let failedList: { id: string; reason: string }[] = [];
 
-    // 🌟 3. บันทึกลงฐานข้อมูล (หุ้มด้วย try-catch รายบุคคล)
     for (const emp of mockEmployees) {
       try {
         const existingEmp = await prisma.employee.findUnique({
           where: { id: emp.id },
         });
-        const existingUser = await prisma.user.findUnique({
-          where: { username: emp.username },
-        });
 
-        // ถ้ามีในระบบแล้วให้ข้าม
-        if (existingEmp || existingUser) {
-          skippedCount++;
+        // ถ้ามีพนักงานคนนี้อยู่แล้ว ให้จด EMP ID ไว้ใน skippedList แล้วข้ามไปคนต่อไป
+        if (existingEmp) {
+          skippedList.push(emp.id);
           continue;
         }
 
-        // 🌟 จัดการอีเมล: ถ้าว่าง ให้เป็น undefined (Prisma จะข้ามการ insert ฟิลด์นี้ไปเลย)
+        const isTerminated = emp.status === "t";
+
+        // ถ้าช่องไหนใน Excel ว่าง จะกลายเป็น undefined ทันที (Prisma จะปล่อยผ่านไม่เอาลง DB)
         const validEmail =
           emp.email && emp.email.trim() !== "" ? emp.email.trim() : undefined;
+        const validUsername =
+          emp.username && emp.username.trim() !== ""
+            ? emp.username.trim()
+            : undefined;
+        const validPassword =
+          emp.passwordRaw && emp.passwordRaw.trim() !== ""
+            ? emp.passwordRaw.trim()
+            : undefined;
 
-        // ถ้ามีอีเมลระบุมา ต้องเช็กด้วยว่าในระบบมีคนใช้อีเมลนี้หรือยัง
-        if (validEmail) {
-          const emailExists = await prisma.user.findUnique({
-            where: { email: validEmail },
+        // 🌟 ตรวจสอบว่า "ต้องสร้างบัญชีผู้ใช้ (User)" หรือไม่?
+        // เงื่อนไขคือ: ต้องไม่เป็น 't' และต้องมี Username กับ Password ระบุมาครบ
+        const shouldCreateUser =
+          !isTerminated && validUsername && validPassword;
+
+        // เช็กข้อมูลซ้ำ เฉพาะคนที่เรากำลังจะสร้าง User ให้
+        if (shouldCreateUser) {
+          const existingUser = await prisma.user.findUnique({
+            where: { username: validUsername },
           });
-          if (emailExists) {
+          if (existingUser) {
             failedList.push({
               id: emp.id,
-              reason: `อีเมล ${validEmail} ถูกใช้งานแล้ว`,
+              reason: `Username ${validUsername} ถูกใช้งานแล้ว`,
             });
-            continue; // ข้ามคนนี้ไปทำคนถัดไป
+            continue;
+          }
+
+          if (validEmail) {
+            const emailExists = await prisma.user.findUnique({
+              where: { email: validEmail },
+            });
+            if (emailExists) {
+              failedList.push({
+                id: emp.id,
+                reason: `อีเมล ${validEmail} ถูกใช้งานแล้ว`,
+              });
+              continue;
+            }
           }
         }
 
-        const passwordHash = await bcrypt.hash(emp.passwordRaw, 10);
-
         await prisma.$transaction(async (tx) => {
-          let compId = 2;
+          let compId = 2; // Default บริษัทตั้งต้น
           const company = await tx.company.findFirst({
             where: { companyCode: emp.companyReg },
           });
           if (company) compId = company.id;
 
-          const newUser = await tx.user.create({
-            data: {
-              username: emp.username,
-              email: validEmail, // ถ้าไม่มีอีเมล มันจะส่ง undefined เข้าไป ไม่เกิด Unique Error
-              passwordHash: passwordHash,
-              role: "USER",
-              isActive: true,
-            },
-          });
+          let newUser = null;
 
+          // 🌟 1. สร้างบัญชีสำหรับล็อกอิน (ถ้าเงื่อนไข shouldCreateUser ผ่าน)
+          if (shouldCreateUser) {
+            // @ts-ignore (หลบ Type Error เพราะเช็กแล้วว่า validPassword ไม่เป็น undefined แน่นอน)
+            const passwordHash = await bcrypt.hash(validPassword, 10);
+            newUser = await tx.user.create({
+              data: {
+                username: validUsername,
+                email: validEmail,
+                passwordHash: passwordHash,
+                role: "USER",
+                isActive: true,
+              },
+            });
+          }
+
+          // 🌟 2. สร้างประวัติพนักงาน (ถูกสร้างเสมอ ไม่ว่าจะมีอีเมลหรือ Password ไหมก็ตาม)
           await tx.employee.create({
             data: {
               id: emp.id,
               fullName: emp.name,
               position: emp.position,
               department: emp.department,
-              email: validEmail, // ถ้าไม่มีอีเมล ส่ง undefined
+              // ถ้ายกเลิกจ้างแล้ว ไม่ต้องเก็บอีเมลลงประวัติพนักงาน
+              email: isTerminated ? undefined : validEmail,
+              startDate: emp.startDate,
+              isActive: !isTerminated,
               currentCompanyId: compId,
-              isActive: true,
-              userId: newUser.id,
+              // ผูกกับบัญชีล็อกอิน (ถ้าไม่ได้ถูกสร้าง newUser ก็จะเป็น undefined ไม่ผูกบัญชี)
+              userId: newUser ? newUser.id : undefined,
             },
           });
         });
 
         successCount++;
       } catch (err: any) {
-        // 🌟 ถ้าระบบพังที่คนไหน จะจด ID คนนั้นเอาไว้ แล้วทำงานต่อโดยไม่หยุด
         console.error(`Error inserting ${emp.id}:`, err.message);
         failedList.push({ id: emp.id, reason: err.message });
       }
     }
 
-    // สรุปผลรายงานออกมาทั้งหมด
+    // 🌟 ส่งผลลัพธ์พร้อมโชว์ List ออกมาทางหน้าจอ
     return NextResponse.json(
       {
         message: "ประมวลผลข้อมูลเสร็จสิ้น!",
         total_in_csv: mockEmployees.length,
         added: successCount,
-        skipped: skippedCount,
+        skipped_count: skippedList.length,
+        skipped_details: skippedList, // 👉 โชว์เลยว่าข้าม EMP ID อะไรไปบ้าง
         failed_count: failedList.length,
-        failed_details: failedList, // 🌟 แสดงให้ดูว่า ID ไหนพัง เพราะอะไร
+        failed_details: failedList,
       },
       { status: 200 },
     );

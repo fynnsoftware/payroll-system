@@ -92,7 +92,7 @@ export default function PayslipDetail() {
 
   // 🌟 ล็อกรายการรายหักตายตัว ตามแบบฟอร์มเดิม
   const fixedDeductions = [
-    { label: 'Withholding Tax', amount: payslip.tax || getVal('DEDUCTION', 'Tax') },
+    { label: 'Tax', amount: payslip.tax || getVal('DEDUCTION', 'Tax') },
     { label: 'Social Security Fund', amount: payslip.sso || getVal('DEDUCTION', 'Social') },
     { label: 'Provident Fund', amount: payslip.pvf || getVal('DEDUCTION', 'Provident') },
     { label: 'Student Loan Fund', amount: getVal('DEDUCTION', 'Student') },
@@ -140,7 +140,7 @@ export default function PayslipDetail() {
           <div className="mb-5 flex items-start justify-between border-b-2 border-blue-600 pb-3">
             <div className="text-right">
               {/* ใช้โลโก้เดิมของคุณ */}
-              <Image src={payslip.company?.logoUrl || "/src/logoFynnSoft.jpg"} alt="Company Logo" width={140} height={60} className="h-[60px] w-auto object-contain" />
+              <Image src={decodeURIComponent(payslip.company?.logoUrl) || "/src/logoFynnSoft.jpg"} alt="Company Logo" width={140} height={60} className="h-[60px] w-auto object-contain" />
             </div>
             <div className="px-4">
               <h4 className="text-xl font-bold text-[#0d47a1]">{payslip.company?.companyName || 'Company Name'}</h4>
