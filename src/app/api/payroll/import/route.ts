@@ -1,7 +1,10 @@
 // src/app/api/payroll/import/route.ts
-import { NextResponse, NextRequest } from "next/server"; // 🌟 เปลี่ยนมาใช้ NextRequest
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getToken } from "next-auth/jwt"; // 🌟 นำเข้า getToken
+import { getToken } from "next-auth/jwt";
+
+// 🌟 1. [เพิ่มใหม่] ขยายเวลา Vercel Serverless Function ให้สูงสุดที่ทำได้ (ตามแพ็กเกจที่คุณใช้ เช่น 120 หรือ 300 วิ)
+export const maxDuration = 120;
 
 // ฟังก์ชันสำหรับแปลงเลขที่บัญชี
 const maskBankAccount = (account: any) => {
@@ -12,9 +15,7 @@ const maskBankAccount = (account: any) => {
 };
 
 export async function POST(request: NextRequest) {
-  // 🌟 รับค่าเป็น NextRequest
   try {
-    // 🌟 1. ดึงข้อมูลคนอัปโหลดจาก Token
     const token = await getToken({ req: request });
     const uploaderName =
       token?.name || (token as any)?.username || "SYSTEM ADMIN";
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     const month = parseInt(monthStr);
     const parsedCompanyId = parseInt(companyId);
 
-    // ดึงรายชื่อพนักงานทั้งหมดที่มีในระบบขึ้นมาเตรียมไว้ใน RAM ก่อน (เร็วมาก)
+    // ดึงรายชื่อพนักงานทั้งหมดที่มีในระบบขึ้นมาเตรียมไว้ใน RAM ก่อน
     const allEmployees = await prisma.employee.findMany({
       select: { id: true },
     });
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
     const newBatch = await prisma.$transaction(
       async (tx) => {
         // ==========================================
-        // 🗑️ 1. เคลียร์ข้อมูลเก่าทิ้ง (รวมถึง PayrollItem ที่ผูกอยู่ด้วยโหมด Cascade)
+        // 🗑️ 1. เคลียร์ข้อมูลเก่าทิ้ง
         // ==========================================
         await tx.payroll.deleteMany({
           where: { month: month, year: year, companyId: parsedCompanyId },
@@ -79,18 +80,20 @@ export async function POST(request: NextRequest) {
         });
 
         // ==========================================
-        // ⚙️ 3. Data Mapping (ประมวลผลข้อมูลใน CPU ล้วนๆ ไม่แตะ Database เลยทำให้โคตรเร็ว)
+        // ⚙️ 3. Data Mapping
         // ==========================================
         const recordsToInsert: any[] = [];
         const payrollDataToInsert: any[] = [];
         const itemsConfigMap = new Map<string, any[]>();
-        const employeeUpdates: any[] = [];
+
+        // 🌟 [แก้ใหม่] เปลี่ยนจากการเก็บคำสั่ง (Promise) มาเป็นการเก็บ "ข้อมูลดิบ" เพื่อเตรียมเอาไปแบ่งทำเป็นรอบๆ
+        const rawEmployeeUpdates: any[] = [];
 
         for (const r of records) {
           const maskedBankAcc = maskBankAccount(r.bankAccount);
           const empId = String(r.id);
 
-          // 3.1 เตรียมข้อมูล Log สำหรับแสดงผลในแต่ละรอบบิล
+          // 3.1 เตรียมข้อมูล Log
           recordsToInsert.push({
             batchId: batch.id,
             rowNumber: r.rowNumber || 0,
@@ -145,175 +148,130 @@ export async function POST(request: NextRequest) {
               companyId: batch.companyId,
             });
 
-            // 3.3 เตรียมข้อมูล Payroll Items ย่อย (Earning / Deduction)
-            const items = [
-              ...(Number(r.salary) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "SALARY",
-                      amount: Number(r.salary),
-                      description: "Base Salary",
-                    },
-                  ]
-                : []),
-              ...(Number(r.mobileAllowance) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "ALLOWANCE",
-                      amount: Number(r.mobileAllowance),
-                      description: "Mobile Allowance",
-                    },
-                  ]
-                : []),
-              ...(Number(r.housingTravelingAllowance) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "ALLOWANCE",
-                      amount: Number(r.housingTravelingAllowance),
-                      description: "Housing/Traveling Allowance",
-                    },
-                  ]
-                : []),
-              ...(Number(r.overtime) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "OVERTIME",
-                      amount: Number(r.overtime),
-                      description: "Overtime (OT)",
-                    },
-                  ]
-                : []),
-              ...(Number(r.bonus) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "BONUS",
-                      amount: Number(r.bonus),
-                      description: "Bonus",
-                    },
-                  ]
-                : []),
-              ...(Number(r.others) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "OTHER",
-                      amount: Number(r.others),
-                      description: "Other Earnings",
-                    },
-                  ]
-                : []),
-              ...(Number(r.parkingAllowance) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "Allowance",
-                      amount: Number(r.parkingAllowance),
-                      description: "Parking Allowance",
-                    },
-                  ]
-                : []),
-              ...(Number(r.perdiemOtherAdditional) > 0
-                ? [
-                    {
-                      itemType: "EARNING",
-                      category: "Allowance",
-                      amount: Number(r.perdiemOtherAdditional),
-                      description: "Perdiem/Other",
-                    },
-                  ]
-                : []),
-              ...(Number(r.tax) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "TAX",
-                      amount: Number(r.tax),
-                      description: "Withholding Tax",
-                    },
-                  ]
-                : []),
-              ...(Number(r.socialSecurityFund) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "SSO",
-                      amount: Number(r.socialSecurityFund),
-                      description: "Social Security Fund",
-                    },
-                  ]
-                : []),
-              ...(Number(r.providentFund) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "PVF",
-                      amount: Number(r.providentFund),
-                      description: "Provident Fund",
-                    },
-                  ]
-                : []),
-              ...(Number(r.studentLoanFund) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "LOAN",
-                      amount: Number(r.studentLoanFund),
-                      description: "Student Loan (กยศ.)",
-                    },
-                  ]
-                : []),
-              ...(Number(r.parking) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "DEDUCTION",
-                      amount: Number(r.parking),
-                      description: "Parking",
-                    },
-                  ]
-                : []),
-              ...(Number(r.otherDeduction) > 0
-                ? [
-                    {
-                      itemType: "DEDUCTION",
-                      category: "OTHER",
-                      amount: Number(r.otherDeduction),
-                      description: "Other deduction",
-                    },
-                  ]
-                : []),
-            ];
+            // 3.3 เตรียมข้อมูล Payroll Items ย่อย
+            const items = [];
+            if (Number(r.salary) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "SALARY",
+                amount: Number(r.salary),
+                description: "Base Salary",
+              });
+            if (Number(r.mobileAllowance) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "ALLOWANCE",
+                amount: Number(r.mobileAllowance),
+                description: "Mobile Allowance",
+              });
+            if (Number(r.housingTravelingAllowance) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "ALLOWANCE",
+                amount: Number(r.housingTravelingAllowance),
+                description: "Housing/Traveling Allowance",
+              });
+            if (Number(r.overtime) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "OVERTIME",
+                amount: Number(r.overtime),
+                description: "Overtime (OT)",
+              });
+            if (Number(r.bonus) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "BONUS",
+                amount: Number(r.bonus),
+                description: "Bonus",
+              });
+            if (Number(r.others) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "OTHER",
+                amount: Number(r.others),
+                description: "Other Earnings",
+              });
+            if (Number(r.parkingAllowance) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "Allowance",
+                amount: Number(r.parkingAllowance),
+                description: "Parking Allowance",
+              });
+            if (Number(r.perdiemOtherAdditional) > 0)
+              items.push({
+                itemType: "EARNING",
+                category: "Allowance",
+                amount: Number(r.perdiemOtherAdditional),
+                description: "Perdiem/Other",
+              });
+
+            if (Number(r.tax) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "TAX",
+                amount: Number(r.tax),
+                description: "Withholding Tax",
+              });
+            if (Number(r.socialSecurityFund) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "SSO",
+                amount: Number(r.socialSecurityFund),
+                description: "Social Security Fund",
+              });
+            if (Number(r.providentFund) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "PVF",
+                amount: Number(r.providentFund),
+                description: "Provident Fund",
+              });
+            if (Number(r.studentLoanFund) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "LOAN",
+                amount: Number(r.studentLoanFund),
+                description: "Student Loan (กยศ.)",
+              });
+            if (Number(r.parking) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "DEDUCTION",
+                amount: Number(r.parking),
+                description: "Parking",
+              });
+            if (Number(r.otherDeduction) > 0)
+              items.push({
+                itemType: "DEDUCTION",
+                category: "OTHER",
+                amount: Number(r.otherDeduction),
+                description: "Other deduction",
+              });
+
             itemsConfigMap.set(empId, items);
 
-            // 3.4 ดันคำสั่งอัปเดตพนักงานไว้ในคิว
+            // 3.4 🌟 [แก้ใหม่] เก็บแค่ข้อมูลดิบไว้ก่อน ยังไม่สร้าง Promise สั่งงาน Database
             if (r.bank || maskedBankAcc) {
-              employeeUpdates.push(
-                tx.employee.update({
-                  where: { id: empId },
-                  data: {
-                    bank: r.bank || undefined,
-                    bankAccount: maskedBankAcc || undefined,
-                  },
-                }),
-              );
+              rawEmployeeUpdates.push({
+                empId: empId,
+                bank: r.bank || undefined,
+                bankAccount: maskedBankAcc || undefined,
+              });
             }
           }
         }
 
         // ==========================================
-        // 🚀 4. ยิงข้อมูลระดับ Bulk Insert
+        // 🚀 4. ยิงข้อมูลระดับ Bulk Insert และ Chunking!
         // ==========================================
 
         if (payrollDataToInsert.length > 0) {
           // 4.1 ยิงสร้าง Payroll
           await tx.payroll.createMany({ data: payrollDataToInsert });
 
-          // 4.2 ดึง ID สลิปที่เพิ่งสร้างมา
+          // 4.2 ดึง ID สลิป
           const createdPayrolls = await tx.payroll.findMany({
             where: {
               month: batch.month,
@@ -323,7 +281,7 @@ export async function POST(request: NextRequest) {
             select: { id: true, employeeId: true },
           });
 
-          // 4.3 ประกอบร่าง ID สลิป เข้ากับ รายการเงินได้/เงินหัก
+          // 4.3 ประกอบร่าง ID สลิป
           const payrollItemsToInsert: any[] = [];
           for (const p of createdPayrolls) {
             const items = itemsConfigMap.get(p.employeeId) || [];
@@ -332,24 +290,46 @@ export async function POST(request: NextRequest) {
             }
           }
 
-          // 4.4 ยิงสร้างรายการย่อยทั้งหมด
-          if (payrollItemsToInsert.length > 0) {
-            await tx.payrollItem.createMany({ data: payrollItemsToInsert });
+          // 4.4 🌟 [แก้ใหม่] ยิงสร้างรายการย่อย (แบ่ง Chunk เผื่อกรณีข้อมูลเยอะเกิน)
+          const chunkSize = 1000;
+          for (let i = 0; i < payrollItemsToInsert.length; i += chunkSize) {
+            const itemsChunk = payrollItemsToInsert.slice(i, i + chunkSize);
+            await tx.payrollItem.createMany({ data: itemsChunk });
           }
         }
 
-        // 4.5 ยิงประวัติ PayrollImportRecord
+        // 4.5 ยิงประวัติ
         if (recordsToInsert.length > 0) {
-          await tx.payrollImportRecord.createMany({ data: recordsToInsert });
+          const chunkSize = 500;
+          for (let i = 0; i < recordsToInsert.length; i += chunkSize) {
+            const recordChunk = recordsToInsert.slice(i, i + chunkSize);
+            await tx.payrollImportRecord.createMany({ data: recordChunk });
+          }
         }
 
-        // 4.6 อัปเดตข้อมูลธนาคารพนักงาน
-        if (employeeUpdates.length > 0) {
-          await Promise.all(employeeUpdates);
+        // 4.6 🌟 [แก้ใหม่] อัปเดตข้อมูลธนาคารพนักงานแบบแบ่ง Chunk!
+        if (rawEmployeeUpdates.length > 0) {
+          const updateChunkSize = 50; // ทำทีละ 50 คน
+          for (let i = 0; i < rawEmployeeUpdates.length; i += updateChunkSize) {
+            const chunk = rawEmployeeUpdates.slice(i, i + updateChunkSize);
+
+            // เอาทีละ 50 คนมาสั่งอัปเดตพร้อมกัน
+            await Promise.all(
+              chunk.map((updateData) =>
+                tx.employee.update({
+                  where: { id: updateData.empId },
+                  data: {
+                    bank: updateData.bank,
+                    bankAccount: updateData.bankAccount,
+                  },
+                }),
+              ),
+            );
+          }
         }
 
         // ==========================================
-        // 📝 5. บันทึกประวัติลงตาราง ImportLog หน้าแอดมิน!
+        // 📝 5. บันทึกประวัติ
         // ==========================================
         await tx.importLog.create({
           data: {
@@ -357,7 +337,7 @@ export async function POST(request: NextRequest) {
             importedBy: uploaderName,
             totalRecords: records.length,
             successCount: recordsToInsert.length,
-            errorCount: 0, // ส่งมาเฉพาะ Ready Records ดังนั้น Error เป็น 0
+            errorCount: 0,
             status: "SUCCESS",
           },
         });
@@ -365,8 +345,8 @@ export async function POST(request: NextRequest) {
         return batch;
       },
       {
-        maxWait: 10000,
-        timeout: 60000,
+        maxWait: 15000,
+        timeout: 120000, // 🌟 2. [เพิ่มใหม่] ขยายเวลา Transaction เป็น 120 วินาที (2 นาทีเต็มๆ)
       },
     );
 
