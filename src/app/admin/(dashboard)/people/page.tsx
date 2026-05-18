@@ -179,7 +179,23 @@ Payroll Administrator`);
 
       if (res.ok) {
         showToast(isAdd ? 'Created successfully!' : 'Updated successfully!');
+        
+        // 🌟 1. ดึงข้อมูลใหม่จาก Database
         fetchData();
+        
+        // 🌟 2. ถ้าเป็นการ "เพิ่มพนักงานใหม่" ให้ตั้งค่า Auto-Filter หาพนักงานคนนั้นทันที
+        if (isAdd && formData.id) {
+          setFilters({ 
+            empId: formData.id, // ใส่รหัสพนักงานที่เพิ่งสร้างลงในช่องค้นหา
+            companyId: '',      // รีเซ็ตตัวกรองอื่นๆ เผื่อติดค่าเก่าอยู่
+            position: '', 
+            department: '', 
+            status: '' 
+          });
+          setCurrentPage(1); // บังคับกลับไปหน้า 1
+        }
+
+        // 🌟 3. ปิด Modal
         setModalType(null);
       } else {
         const err = await res.json();
