@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BiSearch } from 'react-icons/bi';
 // 🌟 Import useSession เพื่อตรวจสอบการล็อกอิน
 import { useSession } from 'next-auth/react'; 
@@ -86,7 +87,19 @@ export default function PayslipList() {
 
   // กำหนดรหัสพนักงานเพื่อเอาไปโชว์ใน UI 
   const displayEmpId = (session.user as any).employeeId || (session.user as any).name || (session.user as any).id || 'Unknown ID';
-
+  // 🌟 ฟังก์ชันช่วยหา Logo (หาจาก Profile ก่อน ถ้าไม่มีหาจากสลิปใบล่าสุด)
+  const getLogoUrl = () => {
+    // 1. ลองเช็กจาก profile ก่อน
+    if (employeeProfile?.company?.logoUrl) {
+      return decodeURIComponent(employeeProfile.company.logoUrl);
+    }
+    // 2. ถ้า profile ไม่มี ลองเช็กจากสลิปใบล่าสุดในตาราง
+    if (payslips?.[0]?.company?.logoUrl) {
+      return decodeURIComponent(payslips[0].company.logoUrl);
+    }
+    // 3. ถ้าไม่มีค่าเลยทั้งสองจุด ให้ใช้ Logo FynnSoft เป็นค่าเริ่มต้น
+    return "/src/logoFynnSoft.jpg"; 
+  };
   return (
     <div className="mx-auto max-w-5xl">
       
@@ -100,22 +113,23 @@ export default function PayslipList() {
         </div>
 
         <div className="flex items-center relative z-10">
-          <div className="mr-6 rounded-full bg-white p-1 shadow-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={`https://ui-avatars.com/api/?name=${employeeProfile?.name || session.user?.name || displayEmpId}&background=0D8ABC&color=fff&size=150`} 
-              className="h-20 w-20 rounded-full object-cover" 
-              alt="avatar" 
+          <div className="mr-6 flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-blue-400 bg-white shadow-sm p-1">
+           <Image 
+              src={getLogoUrl()} 
+              alt="Company Logo" 
+              width={96} 
+              height={96} 
+              className="h-full w-full object-contain"
             />
           </div>
           <div>
-            <h3 className="mb-1 text-2xl font-bold">{employeeProfile?.name || session.user?.name || 'Loading...'}</h3>
+            <h3 className="mb-1 text-2xl font-bold">{employeeProfile?.fullName || session.user?.name || 'Loading...'}</h3>
             <p className="mb-2 text-blue-100">EMP ID: <span className="font-bold">{displayEmpId}</span> | {employeeProfile?.department || '-'}</p>
             <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-600">Position: {employeeProfile?.position || '-'}</span>
           </div>
         </div>
         <div className="hidden text-right lg:block relative z-10">
-          <p className="mb-1 text-sm text-blue-100">Work Start Date</p>
+          <p className="mb-1 text-sm text-blue-100">Employment Starting Date</p>
           <h5 className="text-xl font-bold">{employeeProfile?.startDate ? new Date(employeeProfile.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</h5>
         </div>
       </div>
