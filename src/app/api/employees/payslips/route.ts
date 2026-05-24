@@ -47,6 +47,9 @@ export async function GET(request: NextRequest) {
           mode: "insensitive",
         },
       },
+      include: {
+        company: true,
+      },
     });
 
     // 🌟 4. ดึงข้อมูลสลิปเงินเดือน

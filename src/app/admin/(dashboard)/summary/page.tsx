@@ -418,7 +418,8 @@ export default function SalarySummary() {
                       {monthNames.map((_, i) => (
                         <span key={`sub-${i}`} className="contents">
                           <th className="px-4 py-2 text-[10px] font-bold border-b border-slate-200 text-slate-500 bg-white">INCOME</th>
-                          <th className="px-4 py-2 text-[10px] font-bold border-r border-b border-slate-200 text-red-400 bg-white">DEDUCT</th>
+                          {/* 🌟 1. เปลี่ยนหัวตารางจาก DEDUCT เป็น TAX */}
+                          <th className="px-4 py-2 text-[10px] font-bold border-r border-b border-slate-200 text-red-400 bg-white">TAX</th>
                         </span>
                       ))}
                       <th className="px-4 py-2 text-[10px] font-bold border-b border-emerald-200 text-emerald-600 bg-emerald-50/50">TOTAL INCOME</th>
@@ -442,7 +443,8 @@ export default function SalarySummary() {
                           {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => (
                             <span key={`${emp.id}-${m}`} className="contents">
                               <td className="px-4 py-4 text-right font-mono font-medium text-slate-700">{fmt(emp.months[m].income)}</td>
-                              <td className="px-4 py-4 text-right font-mono font-medium text-red-500 border-r border-slate-100">{fmt(emp.months[m].deduct)}</td>
+                              {/* 🌟 2. ดึงค่า .tax มาแสดงแทน .deduct */}
+                              <td className="px-4 py-4 text-right font-mono font-medium text-red-500 border-r border-slate-100">{fmt(emp.months[m].tax)}</td>
                             </span>
                           ))}
 
@@ -464,7 +466,8 @@ export default function SalarySummary() {
                         {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => (
                           <span key={`total-${m}`} className="contents">
                             <td className="px-4 py-5 text-right font-mono font-bold text-slate-800 border-t border-slate-200">{fmt(companyTotal.months[m].income)}</td>
-                            <td className="px-4 py-5 text-right font-mono font-bold text-red-600 border-r border-t border-slate-200">{fmt(companyTotal.months[m].deduct)}</td>
+                            {/* 🌟 3. ดึงค่ายอดรวม .tax มาแสดงแทนยอดรวม .deduct */}
+                            <td className="px-4 py-5 text-right font-mono font-bold text-red-600 border-r border-t border-slate-200">{fmt(companyTotal.months[m].tax)}</td>
                           </span>
                         ))}
                         <td className="px-4 py-5 text-right font-mono font-black text-emerald-700 border-t border-slate-200 bg-emerald-100/50">{fmt(companyTotal.ytd.income)}</td>
@@ -514,12 +517,18 @@ export default function SalarySummary() {
                 <table className="w-full text-left text-sm whitespace-nowrap">
                   <thead className="sticky top-0 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200 shadow-sm z-10">
                     <tr>
-                      <th className="px-6 py-4">ID</th><th className="px-6 py-4">Name</th><th className="px-6 py-4 text-right">TAX</th><th className="px-6 py-4 text-right">SSO</th><th className="px-6 py-4 text-right">PVF</th><th className="px-6 py-4 text-right">Student Loan (กยศ.)</th><th className="px-6 py-4 text-right text-red-600">Total Deduction</th>
+                      <th className="px-6 py-4">ID</th>
+                      <th className="px-6 py-4">Name</th>
+                      <th className="px-6 py-4 text-right">TAX</th>
+                      <th className="px-6 py-4 text-right">SSO</th>
+                      <th className="px-6 py-4 text-right">PVF</th>
+                      {/* 🌟 เอา Student Loan และ Total Deduction ออกจาก Header */}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {allRecords.length === 0 ? (
-                       <tr><td colSpan={7} className="py-10 text-center text-slate-400">ไม่มีข้อมูลพนักงาน</td></tr>
+                       // 🌟 ปรับ colSpan จาก 7 เหลือ 5 ให้พอดีกับจำนวนคอลัมน์ใหม่
+                       <tr><td colSpan={5} className="py-10 text-center text-slate-400">ไม่มีข้อมูลพนักงาน</td></tr>
                     ) : (
                       allRecords.map((r: any, idx: number) => (
                         <tr key={idx} className="hover:bg-slate-50 transition-colors">
@@ -528,8 +537,7 @@ export default function SalarySummary() {
                           <td className="px-6 py-4 text-right font-mono text-slate-700">{fmt(Number(r.tax))}</td>
                           <td className="px-6 py-4 text-right font-mono text-slate-700">{fmt(Number(r.socialSecurityFund))}</td>
                           <td className="px-6 py-4 text-right font-mono text-slate-700">{fmt(Number(r.providentFund))}</td>
-                          <td className="px-6 py-4 text-right font-mono text-slate-700">{fmt(Number(r.studentLoanFund))}</td>
-                          <td className="px-6 py-4 text-right font-mono font-bold text-red-600 bg-red-50/30">{fmt(Number(r.totalDeduction))}</td>
+                          {/* 🌟 เอา Student Loan และ Total Deduction ออกจาก Body */}
                         </tr>
                       ))
                     )}
